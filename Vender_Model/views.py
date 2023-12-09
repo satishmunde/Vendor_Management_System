@@ -8,4 +8,4 @@ from django.contrib.auth.hashers import make_password, check_password
 
 
 def profile(request):
-    return render(request,'vendor_profile.html')
+    return render(request,'VP/index.html')

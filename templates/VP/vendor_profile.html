@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vendor Management</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 50px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+        .form-control {
+            border-color: #ccc;
+        }
+        .form-label {
+            color: #333;
+        }
+        .btn-primary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+        .btn-primary:hover {
+            background-color: #495057;
+            border-color: #495057;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Vendor Profile Management</h2>
+        <form id="vendor-form" onsubmit="saveVendor(event)">
+            <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="name" required>
+            </div>
+            <div class="mb-3">
+                <label for="contactDetails" class="form-label">Contact Details</label>
+                <textarea class="form-control" id="contactDetails" rows="3" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="address" class="form-label">Address</label>
+                <textarea class="form-control" id="address" rows="3" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="vendorCode" class="form-label">Vendor Code</label>
+                <input type="text" class="form-control" id="vendorCode" required>
+            </div>
+            <div class="mb-3">
+                <label for="onTimeDeliveryRate" class="form-label">On-Time Delivery Rate</label>
+                <input type="number" class="form-control" id="onTimeDeliveryRate" required>
+            </div>
+            <div class="mb-3">
+                <label for="qualityRatingAvg" class="form-label">Quality Rating Avg</label>
+                <input type="number" class="form-control" id="qualityRatingAvg" required>
+            </div>
+            <div class="mb-3">
+                <label for="averageResponseTime" class="form-label">Average Response Time</label>
+                <input type="number" class="form-control" id="averageResponseTime" required>
+            </div>
+            <div class="mb-3">
+                <label for="fulfillmentRate" class="form-label">Fulfillment Rate</label>
+                <input type="number" class="form-control" id="fulfillmentRate" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Create/Update Vendor</button>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function saveVendor(event) {
+            event.preventDefault();
+            // Perform form validation and API operations here
+            const name = document.getElementById('name').value;
+            const contactDetails = document.getElementById('contactDetails').value;
+            const address = document.getElementById('address').value;
+            const vendorCode = document.getElementById('vendorCode').value;
+            const onTimeDeliveryRate = document.getElementById('onTimeDeliveryRate').value;
+            const qualityRatingAvg = document.getElementById('qualityRatingAvg').value;
+            const averageResponseTime = document.getElementById('averageResponseTime').value;
+            const fulfillmentRate = document.getElementById('fulfillmentRate').value;
+
+            // Simulated API operations (you'd replace this with actual API calls)
+            console.log("Vendor Details:");
+            console.log("Name:", name);
+            console.log("Contact Details:", contactDetails);
+            console.log("Address:", address);
+            console.log("Vendor Code:", vendorCode);
+            console.log("On-Time Delivery Rate:", onTimeDeliveryRate);
+            console.log("Quality Rating Avg:", qualityRatingAvg);
+            console.log("Average Response Time:", averageResponseTime);
+            console.log("Fulfillment Rate:", fulfillmentRate);
+        }
+    </script>
+</body>
+</html>

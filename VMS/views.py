@@ -10,19 +10,7 @@ def home(request):
     return render(request,'index.html')
 
 
-def vendor_profile(request):
-    return render(request,'vendor_profile.html')
-
-
-def purchace_order(request):
-    return render(request,'purchase_order.html')
-
-
-def performance_evaluation(request):
-    return render(request,'performance_evaluation.html')
-
-
 def logoutUser(request):
 
     logout(request)
-    return redirect('/login')
+    return redirect('/login')  
