@@ -11,4 +11,5 @@ class HistoricalPerformance(models.Model):
     fulfillment_rate = models.FloatField()
 
     def __str__(self):
-        return f"{self.vendor.name} - Date: {self.date}"
+        return f"{self.vendor.vendor_code} - Date: {self.date}"
+  

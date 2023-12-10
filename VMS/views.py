@@ -10,7 +10,3 @@ def home(request):
     return render(request,'index.html')
 
 
-def logoutUser(request):
-
-    logout(request)
-    return redirect('/login')  

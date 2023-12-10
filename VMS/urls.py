@@ -27,7 +27,7 @@ import Historical_Model.urls
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", views.home ),
-    path("vendor-profile/", include(Vender_Model.urls)),
+    path("index/", include(Vender_Model.urls)),
     path("purchase-order/", include(Purchase_Order_Model.urls)),
     path("performance-evaluation/", include(Historical_Model.urls))
 ]

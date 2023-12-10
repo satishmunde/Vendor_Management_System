@@ -7,7 +7,7 @@
             content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content />
         <meta name="author" content />
-        <title>Vendor Management</title>
+        <title>Order's Management</title>
         <!-- Favicon-->
         <link rel="icon" type="image/x-icon" href="/static/assets/favicon.ico" />
         <!-- Font Awesome icons (free version)-->
@@ -56,15 +56,14 @@
     <body>
         <!-- Navigation-->
         <!-- Image and text -->
-        <nav
-            class="navbar navbar-light bg-light d-flex justify-content-center mb-0 bg-gray">
+        <nav class="navbar navbar-light bg-light d-flex justify-content-center mb-0 bg-gray">
             <a class="navbar-brand">
-                Vendor Management System
+             Vendor Management System
             </a>
         </nav>
         <!-- Masthead-->
 
-        <section class="page-section bg-dark ">
+        <section class="page-section bg-dark " >
 
             <div class="container">
                 <div class="card my-4">
@@ -72,8 +71,9 @@
                     <div class="container">
                         <div class="card">
                             <div class="card-body text-center py-3">
-                                <h4 class="card-title">Vendor's Profiles</h4>
-                                <p class="card-text"> Vendor Profile list
+                                <h4 class="card-title">Order's Page</h4>
+                                <p class="card-text"> 
+                                    Order's list
                                 </p>
                             </div>
                         </div>
@@ -81,65 +81,43 @@
                             <table class="table table-hover">
                                 <thead>
                                     <tr>
-                                        <th scope="col">Vendor Code</th>
+                                        <th scope="col">PO Number</th>
                                         <th scope="col">Vendor Name</th>
+                                        <th scope="col">Order Date</th>
+                                        <th scope="col">Items</th>
+                                        <th scope="col">Quantity</th>
+                                        <th scope="col">Status</th>
                                         <th scope="col">Edit List </th>
                                         <th scope="col">List Info</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% if vendordtls %}
-                                    {% for data in vendordtls %}
-
                                     <tr>
-                                        <th scope="row">{{data.vendor_code}}</th>
-                                        <td>{{data.name}}</td>
+                                        <th scope="row">1</th>
+                  
+                                        <td>Vender Name</td>
+                                        <td>23-11-2023</td>
+                          
+                                        <td>Laptop Bags</td>
+                                        <td>10</td>
+                                        <td>Ordered</td>
                                         <td>
-                                            <form action="/" method="get">
-                                                <input type="hidden"
-                                                    name="vendor_code"
-                                                    value="{{data.vendor_code}}">
-                                                <input type="hidden"
-                                                    name="request" id="request"
-                                                    value="update">
-                                                <button
-                                                    class="btn btn-sm btn-primary editBtn"><i
-                                                        class="far fa-edit"></i>
-                                                    edit</button>
-                                            </form>
-
-                                            <form  method="get">
-                                                <input type="hidden"
-                                                    name="vendor_code"
-                                                    value="{{data.vendor_code}}">
-                                                <input type="hidden"
-                                                    name="request" id="request"
-                                                    value="delete">
-                                                <button
-                                                    class="btn btn-sm btn-danger deleteBtn"><i
-                                                        class="fas fa-trash-alt"></i>
-                                                    delete</button>
-                                            </form>
+                                            <button
+                                                class="btn btn-sm btn-primary editBtn"><i
+                                                    class="far fa-edit"></i>
+                                                edit</button>
+                                            <button
+                                                class="btn btn-sm btn-danger deleteBtn"><i
+                                                    class="fas fa-trash-alt"></i>
+                                                delete</button>
                                         </td>
-                                        <td>
-                                            <form action="index/" method="get">
-                                                <input type="hidden"
-                                                    name="vendor_code"
-                                                    value="{{data.vendor_code}}">
-                                                <input type="hidden"
-                                                    name="request" id="request"
-                                                    value="details">
-                                                <button
-                                                    class="btn btn-sm btn-info detailsBtn"><i
-                                                        class="fas fa-info-circle"></i>
-                                                    Details</button>
-                                            </form>
-
-                                        </td>
+                                        <td><button
+                                                class="btn btn-sm btn-info detailsBtn"><i
+                                                    class="fas fa-info-circle"></i>
+                                                Details</button></td>
                                     </tr>
+                                  
 
-                                    {% endfor %}
-                                    {% endif %}
                                     <!-- Other rows... -->
                                 </tbody>
                             </table>
@@ -175,79 +153,73 @@
                         </div>
                         <div class="modal-body">
                             <!-- Edit form content -->
-                            <div style="width:70%; margin: auto; ">
-
-                                <form id="vendor-form"
-                                    onsubmit="saveVendor(event)">
+                            <div class="container">
+                       
+                                <form id="purchaseOrderForm" novalidate>
                                     <div class="mb-3">
-                                        <label for="name" class="form-label">Name</label>
-                                        <input type="text"
-                                            class="form-control "
-                                            id="name" required>
+                                        <label for="poNumber" class="form-label">PO Number</label>
+                                        <input type="text" class="form-control" id="poNumber" required>
+                                        <div class="invalid-feedback">
+                                            Please enter the PO Number.
+                                        </div>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="contactDetails"
-                                            class="form-label">Contact
-                                            Details</label>
-                                        <textarea class="form-control"
-                                            id="contactDetails" rows="3"
-                                            required></textarea>
+                                        <label for="vendor" class="form-label">Vendor</label>
+                                        <select class="form-select" id="vendor" required>
+                                            <option value="">Select Vendor</option>
+                                            <!-- Add vendor options here -->
+                                            <!-- Example: <option value="vendor_id">Vendor Name</option> -->
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            Please select a vendor.
+                                        </div>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="address"
-                                            class="form-label">Address</label>
-                                        <textarea class="form-control"
-                                            id="address" rows="3" required></textarea>
+                                        <label for="orderDate" class="form-label">Order Date</label>
+                                        <input type="datetime-local" class="form-control" id="orderDate" required>
+                                        <div class="invalid-feedback">
+                                            Please enter the Order Date.
+                                        </div>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="vendorCode"
-                                            class="form-label">Vendor Code</label>
-                                        <input type="text"
-                                            class="form-control"
-                                            id="vendorCode" required>
+                                        <label for="deliveryDate" class="form-label">Delivery Date</label>
+                                        <input type="datetime-local" class="form-control" id="deliveryDate" required>
+                                        <div class="invalid-feedback">
+                                            Please enter the Delivery Date.
+                                        </div>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="onTimeDeliveryRate"
-                                            class="form-label">On-Time
-                                            Delivery
-                                            Rate</label>
-                                        <input type="number"
-                                            class="form-control"
-                                            id="onTimeDeliveryRate" required>
+                                        <label for="items" class="form-label">Items</label>
+                                        <input type="text" class="form-control" id="items">
                                     </div>
                                     <div class="mb-3">
-                                        <label for="qualityRatingAvg"
-                                            class="form-label">Quality
-                                            Rating
-                                            Avg</label>
-                                        <input type="number"
-                                            class="form-control"
-                                            id="qualityRatingAvg" required>
+                                        <label for="quantity" class="form-label">Quantity</label>
+                                        <input type="number" class="form-control" id="quantity" required>
+                                        <div class="invalid-feedback">
+                                            Please enter the Quantity.
+                                        </div>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="averageResponseTime"
-                                            class="form-label">Average
-                                            Response
-                                            Time</label>
-                                        <input type="number"
-                                            class="form-control"
-                                            id="averageResponseTime"
-                                            required>
+                                        <label for="status" class="form-label">Status</label>
+                                        <input type="text" class="form-control" id="status">
                                     </div>
                                     <div class="mb-3">
-                                        <label for="fulfillmentRate"
-                                            class="form-label">Fulfillment
-                                            Rate</label>
-                                        <input type="number"
-                                            class="form-control"
-                                            id="fulfillmentRate" required>
+                                        <label for="qualityRating" class="form-label">Quality Rating</label>
+                                        <input type="number" step="0.01" class="form-control" id="qualityRating">
                                     </div>
-                                    <button type="submit"
-                                        class="btn btn-primary">Create/Update
-                                        Vendor</button>
+                                    <div class="mb-3">
+                                        <label for="issueDate" class="form-label">Issue Date</label>
+                                        <input type="datetime-local" class="form-control" id="issueDate">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="acknowledgmentDate" class="form-label">Acknowledgment Date</label>
+                                        <input type="datetime-local" class="form-control" id="acknowledgmentDate">
+                                    </div>
+                                    
+                                    <button type="submit" class="btn btn-primary">Submit</button>
                                 </form>
-
                             </div>
+                        
                         </div>
                     </div>
                 </div>
@@ -291,74 +263,72 @@
                         <div class="modal-body">
                             <!-- Details content -->
                             <div class="container">
-
-                                <form id="vendor-form"
-                                    onsubmit="saveVendor(event)">
+                
+                                <form id="purchaseOrderForm" novalidate>
                                     <div class="mb-3">
-                                        <label for="name" class="form-label">Name</label>
-                                        <input type="text"
-                                            class="form-control" id="name"
-                                            required>
+                                        <label for="poNumber" class="form-label">PO Number</label>
+                                        <input type="text" class="form-control" id="poNumber" required>
+                                        <div class="invalid-feedback">
+                                            Please enter the PO Number.
+                                        </div>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="contactDetails"
-                                            class="form-label">Contact
-                                            Details</label>
-                                        <textarea class="form-control"
-                                            id="contactDetails" rows="3"
-                                            required></textarea>
+                                        <label for="vendor" class="form-label">Vendor</label>
+                                        <select class="form-select" id="vendor" required>
+                                            <option value="">Select Vendor</option>
+                                            <!-- Add vendor options here -->
+                                            <!-- Example: <option value="vendor_id">Vendor Name</option> -->
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            Please select a vendor.
+                                        </div>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="address"
-                                            class="form-label">Address</label>
-                                        <textarea class="form-control"
-                                            id="address" rows="3" required></textarea>
+                                        <label for="orderDate" class="form-label">Order Date</label>
+                                        <input type="datetime-local" class="form-control" id="orderDate" required>
+                                        <div class="invalid-feedback">
+                                            Please enter the Order Date.
+                                        </div>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="vendorCode"
-                                            class="form-label">Vendor Code</label>
-                                        <input type="text"
-                                            class="form-control"
-                                            id="vendorCode" required>
+                                        <label for="deliveryDate" class="form-label">Delivery Date</label>
+                                        <input type="datetime-local" class="form-control" id="deliveryDate" required>
+                                        <div class="invalid-feedback">
+                                            Please enter the Delivery Date.
+                                        </div>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="onTimeDeliveryRate"
-                                            class="form-label">On-Time
-                                            Delivery Rate</label>
-                                        <input type="number"
-                                            class="form-control"
-                                            id="onTimeDeliveryRate" required>
+                                        <label for="items" class="form-label">Items</label>
+                                        <input type="text" class="form-control" id="items">
                                     </div>
                                     <div class="mb-3">
-                                        <label for="qualityRatingAvg"
-                                            class="form-label">Quality
-                                            Rating Avg</label>
-                                        <input type="number"
-                                            class="form-control"
-                                            id="qualityRatingAvg" required>
+                                        <label for="quantity" class="form-label">Quantity</label>
+                                        <input type="number" class="form-control" id="quantity" required>
+                                        <div class="invalid-feedback">
+                                            Please enter the Quantity.
+                                        </div>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="averageResponseTime"
-                                            class="form-label">Average
-                                            Response Time</label>
-                                        <input type="number"
-                                            class="form-control"
-                                            id="averageResponseTime"
-                                            required>
+                                        <label for="status" class="form-label">Status</label>
+                                        <input type="text" class="form-control" id="status">
                                     </div>
                                     <div class="mb-3">
-                                        <label for="fulfillmentRate"
-                                            class="form-label">Fulfillment
-                                            Rate</label>
-                                        <input type="number"
-                                            class="form-control"
-                                            id="fulfillmentRate" required>
+                                        <label for="qualityRating" class="form-label">Quality Rating</label>
+                                        <input type="number" step="0.01" class="form-control" id="qualityRating">
                                     </div>
-                                    <button type="submit"
-                                        class="btn btn-primary">Create/Update
-                                        Vendor</button>
+                                    <div class="mb-3">
+                                        <label for="issueDate" class="form-label">Issue Date</label>
+                                        <input type="datetime-local" class="form-control" id="issueDate">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="acknowledgmentDate" class="form-label">Acknowledgment Date</label>
+                                        <input type="datetime-local" class="form-control" id="acknowledgmentDate">
+                                    </div>
+                                    
+                                    <button type="submit" class="btn btn-primary">Submit</button>
                                 </form>
                             </div>
+                        
 
                         </div>
                     </div>

@@ -4,12 +4,13 @@ from Vender_Model.models import *
 
 class PurchaseOrder(models.Model):
     STATUS_CHOICES = (
-        ('pending', 'Pending'),
-        ('completed', 'Completed'),
-        ('canceled', 'Canceled'),
+        ('ordered', 'Ordered'),
+        ('in-transist', 'In-Transist'),
+        ('delevered', 'Delevered'),
+        ('canceled', 'Canceled'), 
     )
 
-    po_number = models.CharField(max_length=50, unique=True)
+    po_number = models.CharField(max_length=50, unique=True ,primary_key=True)
     vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE)
     order_date = models.DateTimeField()
     delivery_date = models.DateTimeField()
@@ -21,4 +22,5 @@ class PurchaseOrder(models.Model):
     acknowledgment_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
-        return f"PO: {self.po_number} - Vendor: {self.vendor.name}"
+        return f"PO: {self.po_number} - Vendor: {self.vendor.vendor_code}"
+ 
