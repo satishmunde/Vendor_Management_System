@@ -1,6 +1,7 @@
 from django.db import models
 
 class Vendor(models.Model):
+    
     vendor_code = models.CharField(max_length=50, unique=True, primary_key=True)
     name = models.CharField(max_length=100)
     contact_details = models.TextField()
@@ -12,4 +13,5 @@ class Vendor(models.Model):
 
     def __str__(self):
         return self.vendor_code
+  
   
