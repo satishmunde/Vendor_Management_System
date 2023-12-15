@@ -1,6 +1,3 @@
-
-
-
 function searchOrder() {
     // Perform API call to fetch order details based on the entered Order ID
     // Fill the table body with the fetched data
@@ -8,43 +5,12 @@ function searchOrder() {
     document.getElementById('orderDetailsTable').classList.add('fadeIn');
 }
 
-// document.getElementById('updatebtn').addEventListener('click', function () {
-//     // Autofill form fields with the selected order details from the table
-//     // Assuming you have a button with an ID 'getVendorButton' in your HTML
-
-//     // Define the URL for the API endpoint
-//     var code = document.getElementById("vendor_code").value
-
-
-//     var xhr = new XMLHttpRequest();
-//     xhr.open('GET', `http://127.0.0.1:8000/vendor-dtl/api/getVendor/${code}/`, true);
-//     xhr.onreadystatechange = function () {
-//         if (xhr.readyState === XMLHttpRequest.DONE) {
-//             if (xhr.status === 200) {
-//                 var data = JSON.parse(xhr.responseText);
-//                 // Process the retrieved data here
-//                 console.log(data);
-//             } else {
-//                 console.error('There was a problem with the request.');
-//             }
-//         }
-//     };
-//     xhr.send();
-
-
-
-//     document.getElementById('updateForm').classList.remove('hide');
-//     document.getElementById('updateForm').classList.add('fadeIn');
-// });
-
 function deleteOrder() {
-    // Perform deletion of the selected order
-    // Handle confirmation/alert before deletion
+
 }
 
 function updateOrder() {
-    // Perform update operation with the modified data from the form
-    // Show success message or handle errors
+   
 }
 function openAddVendorDialog() {
 
@@ -57,7 +23,8 @@ const addVendorModal = new bootstrap.Modal(document.getElementById('addVendorMod
 
 function closeModal() {
     // Close modal
-    this.hide();
+    // $('#searchModal').hide(2000)
+    this.hide
 }
 
 function openSearchDialog() {
@@ -67,6 +34,7 @@ function openSearchDialog() {
 
 function openEditVendor(vendorid){
 
+    $('#searchModal').modal('hide')
     console.log("-----------------------------called");
     $('#editModal').modal('show');
 
@@ -90,10 +58,6 @@ const editModal = new bootstrap.Modal(document.getElementById('editModal'), {
     keyboard: false
 });
 
-// Open details modal on Details button click
-// $('.detailsBtn').click(function() {
-//$('#detailsModal').modal('show');
-//}); 
 
 const details = new bootstrap.Modal(document.getElementById('detailsModal'), {
     backdrop: 'static',
@@ -107,20 +71,26 @@ function searchUser() {
 
     var code = document.getElementById("orderIdInput").value
 
-
+    let table = ""
+                var myDiv = document.getElementById('myDiv');
+                myDiv.insertAdjacentHTML('afterend', table);
     var xhr = new XMLHttpRequest();
     xhr.open('GET', `http://127.0.0.1:8000/vendor-dtl/api/getVendor/${code}/`, true);
     xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             if (xhr.status === 200) {
                 var data = JSON.parse(xhr.responseText);
-
+                
                 console.log(data);
+                let table = ""
+                var myDiv = document.getElementById('myDiv');
+                myDiv.insertAdjacentHTML('afterend', table);
+               
 
 
 
 
-                const table = ` <table class="table table-hover">
+                 table = ` <table class="table table-hover">
         <thead>
             <tr>
                 <th scope="col">Vendor Code</th>
@@ -136,7 +106,7 @@ function searchUser() {
                 <td>${data.name}</td>
                 <td>
                       
-                        <button id="updatebtn" value="${data.vendor_code}"  onclick="openEditVendor('${data.vendor_code}')"
+                        <button id="updatebtn" value="${data.vendor_code}"  onclick="openEditVendor('${data}')"
                             class="btn btn-sm btn-primary editBtn"><i
                                 class="far fa-edit"  ></i>
                             edit</button>
@@ -164,6 +134,7 @@ function searchUser() {
     </table>`
                 var myDiv = document.getElementById('myDiv');
                 myDiv.insertAdjacentHTML('afterend', table);
+                
             } else {
                 console.error('There was a problem with the request.');
             }

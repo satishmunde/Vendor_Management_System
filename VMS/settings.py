@@ -41,7 +41,16 @@ INSTALLED_APPS = [
     "Purchase_Order_Model",
     "Historical_Model",
     'rest_framework',
+    'api',
 ]
+
+# Other DRF configurations
+REST_FRAMEWORK = {
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser',
+    ],}
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

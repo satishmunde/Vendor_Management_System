@@ -29,5 +29,8 @@ urlpatterns = [
     path("", views.home ),
     path("vendor-dtl/", include(Vender_Model.urls)),
     path("purchase-order/", include(Purchase_Order_Model.urls)),
-    path("performance-evaluation/", include(Historical_Model.urls))
+    path("performance-evaluation/", include(Historical_Model.urls)),
+    path("api/",include('api.urls') ),
+    
+    
 ]
