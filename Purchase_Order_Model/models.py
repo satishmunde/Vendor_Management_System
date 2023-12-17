@@ -4,7 +4,7 @@ from Vender_Model.models import *
 
 class PurchaseOrder(models.Model):
     STATUS_CHOICES = (
-        ('ordered', 'Ordered'),
+        ('ordered', 'Ordered'), 
         ('in-transist', 'In-Transist'),
         ('delevered', 'Delevered'),
         ('canceled', 'Canceled'), 

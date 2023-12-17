@@ -19,6 +19,10 @@
         <link
             href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700"
             rel="stylesheet" type="text/css" />
+            <!-- CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+
+
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="/static/css/index.css" rel="stylesheet" />
         <style>
@@ -59,36 +63,29 @@
         <nav
             class="navbar navbar-light bg-light d-flex justify-content-center mb-0 bg-gray">
             <a class="navbar-brand">
-                Vendor Management System
+              Vendor's Profile
             </a>
         </nav>
         <!-- Masthead-->
 
         <section class="page-section bg-dark ">
+            <div class="row mt-1 d-flex justify-content-center">
+                <div class="col-md-3">
+                    <button class="btn btn-primary"
+                        onclick="openAddVendorDialog()">Add Vendor</button>
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-secondary"
+                        onclick="openSearchDialog()">Search</button>
+                </div>
+            </div>
 
             <div class="container">
-                <div class="card my-4">
-                    <!-- Your table content -->
-                    <div class="container">
-                        <div class="card">
-                            <div class="card-body text-center py-3">
-                                <h4 class="card-title">Vendor's Profiles</h4>
-                                <p class="card-text"> Vendor Profile list
-                                </p>
-                            </div>
-                        </div>
-                        <div class="row mt-4">
-                            <div class="col-md-6">
-                                <button class="btn btn-primary"
-                                    onclick="openAddVendorDialog()">Add Vendor</button>
-                            </div>
-                            <div class="col-md-6">
-                                <button class="btn btn-secondary"
-                                    onclick="openSearchDialog()">Search</button>
-                            </div>
-                        </div>
-                        <div class="card my-4">
-                            <table class="table table-hover">
+                
+                
+                        
+                        <div class="card my-4 p-2">
+                            <table class="table table-hover " id="myDataTable">
                                 <thead>
                                     <tr>
                                         <th scope="col">Vendor Code</th>
@@ -119,9 +116,7 @@
                                 </tbody>
                             </table>
                         </div>
-                    </div>
-
-                </div>
+             
 
             </div>
 
@@ -133,8 +128,7 @@
                     <div class="modal-content">
                         <!-- Your edit modal content -->
                         <div class="modal-header">
-                            <h5 class="modal-title" id="editModalLabel">Edit
-                                Modal</h5>
+                            <h5 class="modal-title" id="editModalLabel"></h5>
                             <button type="button" class="btn-close"
                                 data-bs-dismiss="modal" aria-label="Close"
                                 onclick="closeModal()"></button>
@@ -142,34 +136,35 @@
                         <div class="modal-body">
                             <!-- Edit form content -->
                             <div style="width:70%; margin: auto; ">
+                                <form action="#" method="POST">
+                                    <div class="mb-3">
+                                        <input type="hidden"  name="req" value="update">
+                                        <input type="hidden" name="upvcid" id="vcid" value = "">
+                                        <label for="name" class="form-label">Name</label>
+                                        <input type="text" name="name"
+                                            class="form-control "
+                                            id="name" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="contactDetails"
+                                            class="form-label">Contact
+                                            Details</label>
+                                        <textarea class="form-control" name="contact"
+                                            id="contactDetails" rows="3"
+                                            required></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="address"
+                                            class="form-label">Address</label>
+                                        <textarea class="form-control" name="address"
+                                            id="address" rows="3" required></textarea>
+                                    </div>
 
-                  
-                                <div class="mb-3">
-                                    <label for="name" class="form-label">Name</label>
-                                    <input type="text"
-                                        class="form-control "
-                                        id="name" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="contactDetails"
-                                        class="form-label">Contact
-                                        Details</label>
-                                    <textarea class="form-control"
-                                        id="contactDetails" rows="3"
-                                        required></textarea>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="address"
-                                        class="form-label">Address</label>
-                                    <textarea class="form-control"
-                                        id="address" rows="3" required></textarea>
-                                </div>
-
-                                <button type="submit"
-                                    class="btn btn-primary">Create/Update
-                                    Vendor</button>
-                            </form>
-
+                                    <button type="submit"
+                                        class="btn btn-primary">Update
+                                        Vendor</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -208,17 +203,19 @@
                     <div class="modal-header">
                         <h4 class="modal-title" id="detailsModalLabel">
                             Register Vendor</h4>
-                        <button type="button" class="btn-close"
+                        <button type="button" class="btn-lose"
                             data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <!-- Details content -->
                         <div class="container">
 
-                            <form id="vendor-form" action="/vendor-dtl/vendor-reg/"
+                            <form id="vendor-form" action="#"
                                 method="POST">
                                 {% csrf_token %}
                                 <div class="mb-3">
+                                    <input type="hidden" name="req" id="req"
+                                        value="add">
                                     <label for="name" class="form-label">Name</label>
                                     <input type="text"
                                         class="form-control" id="name"
@@ -269,9 +266,9 @@
                     </div>
                     <div class="modal-body">
                         <!-- Details content -->
-                        <div class="container mt-5">
+                        <div class="container mt-5" id="parent">
 
-                            <div class="mb-3" id ="myDiv">
+                            <div class="mb-3" id="myDiv">
                                 <label for="orderIdInput"
                                     class="form-label">Search Order ID:</label>
                                 <input type="text" class="form-control"
@@ -279,6 +276,9 @@
                                     placeholder="Enter Vendor ID">
                                 <button class="btn btn-primary mt-3"
                                     onclick="searchUser()">Search</button>
+                            </div>
+                            <div id="table">
+
                             </div>
 
                         </div>
@@ -328,7 +328,19 @@
         <script
             src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <!-- Core theme JS-->
+        
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#myDataTable').DataTable();
+    });
+</script>
+
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
         <script src="/static/js/main.js">
+            
 
 
     </script>

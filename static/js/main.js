@@ -10,7 +10,7 @@ function deleteOrder() {
 }
 
 function updateOrder() {
-   
+
 }
 function openAddVendorDialog() {
 
@@ -32,14 +32,36 @@ function openSearchDialog() {
 }
 
 
-function openEditVendor(vendorid){
 
-    $('#searchModal').modal('hide')
+function openEditVendor(vendorid) {
+    $('#searchModal').modal('hide');
     console.log("-----------------------------called");
-    $('#editModal').modal('show');
 
-    console.log(vendorid);
+    document.getElementById('editModalLabel').innerHTML = vendorid;
 
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', `http://127.0.0.1:8000/api/vendors/${vendorid}/`, true);
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+
+            if (xhr.status === 200) {
+                var data = JSON.parse(xhr.responseText);
+                document.getElementById('name').value = data.name
+                document.getElementById('contactDetails').value = data.contact_details
+                document.getElementById('address').value = data.address
+                document.getElementById("vcid").value = data.vendor_code
+
+                $('#editModal').modal('show');
+            } else {
+                alert(`Error ${xhr.status}: ${xhr.statusText}`); // An error occurred!
+            }
+        }
+    };
+    xhr.onerror = function () {
+        alert("Request failed"); // Handle network errors
+    };
+    xhr.send();
 }
 
 
@@ -71,26 +93,22 @@ function searchUser() {
 
     var code = document.getElementById("orderIdInput").value
 
-    let table = ""
-                var myDiv = document.getElementById('myDiv');
-                myDiv.insertAdjacentHTML('afterend', table);
+
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', `http://127.0.0.1:8000/vendor-dtl/api/getVendor/${code}/`, true);
+    xhr.open('GET', `http://127.0.0.1:8000/api/vendors/${code}/`, true);
     xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             if (xhr.status === 200) {
                 var data = JSON.parse(xhr.responseText);
-                
+
                 console.log(data);
                 let table = ""
-                var myDiv = document.getElementById('myDiv');
-                myDiv.insertAdjacentHTML('afterend', table);
-               
+                var myDiv = document.getElementById('parent');
+                myDiv.removeChild(myDiv.children[1])
 
 
 
-
-                 table = ` <table class="table table-hover">
+                table = ` <table class="table table-hover">
         <thead>
             <tr>
                 <th scope="col">Vendor Code</th>
@@ -106,14 +124,14 @@ function searchUser() {
                 <td>${data.name}</td>
                 <td>
                       
-                        <button id="updatebtn" value="${data.vendor_code}"  onclick="openEditVendor('${data}')"
+                        <button id="updatebtn" value="${data.vendor_code}"  onclick="openEditVendor('${data.vendor_code}')"
                             class="btn btn-sm btn-primary editBtn"><i
                                 class="far fa-edit"  ></i>
                             edit</button>
                 
 
                    
-                        <button value="${data.vendor_code}" id="deletebtn"
+                        <button id="deletebtn"  value="${data.vendor_code}" onclick="deleteVendor('${data.vendor_code}')"
                             class="btn btn-sm btn-danger deleteBtn"><i
                                 class="fas fa-trash-alt"></i>
                             delete</button>
@@ -134,11 +152,27 @@ function searchUser() {
     </table>`
                 var myDiv = document.getElementById('myDiv');
                 myDiv.insertAdjacentHTML('afterend', table);
-                
+
             } else {
                 console.error('There was a problem with the request.');
             }
         }
     };
+    xhr.send();
+}
+
+function deleteVendor(vendor_code) {
+    $('#searchModal').modal('hide');
+    console.log("-----------------------------called");
+    var xhr = new XMLHttpRequest();
+    console.log(vendor_code);
+    xhr.open('DELETE', `http://127.0.0.1:8000/api/vendors/${vendor_code}/`, true);
+    xhr.onreadystatechange = function () {
+        
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            alert(`${vendor_code} is Deleted`)
+            location.href = "http://127.0.0.1:8000/vendor-dtl/"
+        }
+    }
     xhr.send();
 }

@@ -22,9 +22,8 @@ from . import views
 
 urlpatterns = [
    
-    # path("", views.profile ),
-    # path("vendor-reg/",views.vendor_reg),
-    # path("get-user/",views.get_user),
+    path("", views.profile ),
+  
     # path("api/",include('api.urls')),
  
 

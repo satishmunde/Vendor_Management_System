@@ -23,10 +23,6 @@ from . import views
 urlpatterns = [ 
    
     path("", views.purchase_order),
-    path("get-ord/",views.get_ord),
-    path("get-all-ord/",views.get_all_ord),
-    path("update-ord/",views.update_ord),
-    path("gen-ord/",views.gen_ord)
 
 
 ]
