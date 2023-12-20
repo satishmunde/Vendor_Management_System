@@ -74,8 +74,32 @@
                 </div>
                 <div class="col-md-3 bd">
                     <button class="btn btn-secondary"
-                        onclick="openSearchDialog()">Search</button>
+                        onclick="openSearch()">Search</button>
                 </div>
+
+                <div class="col-3">
+                    <form action="#" method="get">
+                        <label for="vendor"
+                            class="form-label">Vendor</label>
+                        <select class="form-select"
+                            id="vendor" name="vendor_id"
+                            >
+                            <option value>All Vendors</option>
+                            {% if vendors %}
+                            {% for data in vendors %}
+                            <option value="{{data.vendor_code}}" class>{{data.vendor_code}}</option>
+                            {% endfor %}
+                            {% endif %}
+
+                        </select>
+                        <button class="btn btn-secondary"
+                        type="submit">Filter</button>
+                    </form>
+                    <div class="invalid-feedback">
+                        Please select a vendor.
+                    </div>
+                </div>
+
             </div>
 
             <div class="container">
@@ -100,7 +124,9 @@
                                 <tr>
                                     <th scope="row">{{data.po_number}}</th>
                                     <td>{{data.vendor}}</td>
-                                    <td>{{data.order_date}}</td>
+
+                                    <td>{{ data.order_date|slice:":10" }}</td>
+
                                     {% for items in data.items %}
                                     <td>{{items.item_name}}</td>
                                     {% endfor %}
@@ -108,15 +134,18 @@
                                     <td>{{data.status}}</td>
                                     <td>
                                         <button
+                                            onclick="editPODialog('{{data.po_number}}');"
                                             class="btn btn-sm btn-primary editBtn"><i
                                                 class="far fa-edit"></i>
                                             edit</button>
                                         <button
+                                            onclick="deletePO('{{data.po_number}}');"
                                             class="btn btn-sm btn-danger deleteBtn"><i
                                                 class="fas fa-trash-alt"></i>
                                             delete</button>
                                     </td>
                                     <td><button
+                                            onclick="openDtlPO('{{data.po_number}}');"
                                             class="btn btn-sm btn-info detailsBtn"><i
                                                 class="fas fa-info-circle"></i>
                                             Details</button></td>
@@ -133,15 +162,15 @@
             </div>
 
             <!-- Edit modal -->
-            <div class="modal fade" id="editModal" tabindex="-1"
+            <div class="modal fade" id="editPO" tabindex="-1"
                 role="dialog"
-                aria-labelledby="editModalLabel" aria-hidden="true">
+                aria-labelledby="editPOLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <!-- Your edit modal content -->
                         <div class="modal-header">
-                            <h5 class="modal-title" id="editModalLabel">Edit
-                                Modal</h5>
+                            <h5 class="modal-title" id="editPOLabel">Edit Order
+                            </h5>
                             <button type="button" class="btn-close"
                                 data-bs-dismiss="modal" aria-label="Close"
                                 onclick="closeModal()"></button>
@@ -150,61 +179,92 @@
                             <!-- Edit form content -->
                             <div class="container">
 
-                                <form id="purchaseOrderForm" method="POST" action="#">
+                                <form id="purchaseOrderForm" method="POST"
+                                    action="#">
                                     {% csrf_token %}
-                                    <input type="hidden" name="req" value="add">
-                                    <div class="mb-3">
-                                        <label for="vendor" class="form-label">Vendor</label>
-                                        <select class="form-select" id="vendor" name="vendor_id"
-                                            required>
-                                            <option value="" id ="options">Select Vendor</option>
-                                       
-                                        </select>
-                                        <div class="invalid-feedback">
-                                            Please select a vendor.
-                                        </div>
-                                    </div>
+                                    <div>
+                                        <label for="editpoid"
+                                            class="form-label">PO ID</label>
+                                        <input type="text"
+                                            class="form-control"
+                                            name="poid" readonly
+                                            id="editpoid">
+                                        <input type="hidden" name="req"
+                                            value="update">
+                                        <div class="mb-3">
+                                            <label for="vendor"
+                                                class="form-label">Vendor</label>
+                                            <select class="form-select"
+                                                id="editvendor" name="vendor_id"
+                                                required>
+                                                <option value>Select Vendor</option>
+                                                {% if vendors %}
+                                                {% for data in vendors %}
+                                                <option
+                                                    value="{{data.vendor_code}}">{{data.vendor_code}}</option>
+                                                {% endfor %}
+                                                {% endif %}
+                                            </select>
 
-                                    <div class="mb-3">
-                                        <label for="items" class="form-label">Items</label>
-                                        <input type="text" class="form-control" name="items" required
-                                            id="items">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="quantity" class="form-label">Quantity</label>
-                                        <input type="number"
-                                            class="form-control" id="quantity" name="quantity" required
-                                            required>
-                                        <div class="invalid-feedback">
-                                            Please enter the Quantity.
+                                            <div class="invalid-feedback">
+                                                Please select a vendor.
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <button type="submit"
-                                        class="btn btn-primary">Submit</button>
+                                        <div class="mb-3">
+                                            <label for="items"
+                                                class="form-label">Items</label>
+                                            <input type="text"
+                                                class="form-control"
+                                                name="items" required
+                                                id="edititems">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="quantity"
+                                                class="form-label">Quantity</label>
+                                            <input type="number"
+                                                class="form-control"
+                                                id="editqty"
+                                                name="quantity" required
+                                                required>
+                                            <div class="invalid-feedback">
+                                                Please enter the Quantity.
+                                            </div>
+                                        </div>
+
+                                        <button type="submit"
+                                            class="btn btn-primary">Submit</button>
+                                    </div>
                                 </form>
-                            </div>
 
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Details modal -->
-            <div class="modal fade" id="detailsModal" tabindex="-1"
-                role="dialog" aria-labelledby="detailsModalLabel"
+            <div class="modal fade" id="poDetails" tabindex="-1"
+                role="dialog" aria-labelledby="poDetailsLabel"
                 aria-hidden="true">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <!-- Your details modal content -->
                         <div class="modal-header">
-                            <h5 class="modal-title" id="detailsModalLabel">Details
-                                Modal</h5>
+                            <h5 class="modal-title"
+                                id="poDetailsLabel">Order Details</h5>
                             <button type="button" class="btn-close"
-                                data-bs-dismiss="modal" aria-label="Close"></button>
+                                data-bs-dismiss="modal"
+                                aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <!-- Details content -->
+                            <div class="container">
+                                <div class="card">
+                                    <div class="card-body" id="dtl">
+
+                                    </div>
+                                </div>
+                            </div>
 
                         </div>
                     </div>
@@ -220,39 +280,58 @@
                     <div class="modal-content">
                         <!-- Your details modal content -->
                         <div class="modal-header">
-                            <h4 class="modal-title" id="detailsModalLabel">
+                            <h4 class="modal-title"
+                                id="poDetailsLabel">
                                 Register Vendor</h4>
                             <button type="button" class="btn-close"
-                                data-bs-dismiss="modal" aria-label="Close"></button>
+                                data-bs-dismiss="modal"
+                                aria-label="Close" onclick="closeModal()"></button>
                         </div>
                         <div class="modal-body">
                             <!-- Details content -->
                             <div class="container">
 
-                                <form id="purchaseOrderForm" method="POST" action="#">
+                                <form id="purchaseOrderForm"
+                                    method="POST" action="#">
                                     {% csrf_token %}
-                                    <input type="hidden" name="req" value="add">
+                                    <input type="hidden" name="req"
+                                        value="add">
                                     <div class="mb-3">
-                                        <label for="vendor" class="form-label">Vendor</label>
-                                        <select class="form-select" id="vendor" name="vendor_id"
+                                        <label for="vendor"
+                                            class="form-label">Vendor</label>
+                                        <select class="form-select"
+                                            id="vendor" name="vendor_id"
                                             required>
-                                            <option value="" id ="options">Select Vendor</option>
-                                       
+                                            <option value>Select Vendor</option>
+                                            {% if vendors %}
+                                            {% for data in vendors %}
+                                            <option
+                                                value="{{data.vendor_code}}">{{data.vendor_code}}</option>
+                                            {% endfor %}
+                                            {% endif %}
+
                                         </select>
                                         <div class="invalid-feedback">
                                             Please select a vendor.
                                         </div>
+
                                     </div>
 
                                     <div class="mb-3">
-                                        <label for="items" class="form-label">Items</label>
-                                        <input type="text" class="form-control" name="items" required
+                                        <label for="items"
+                                            class="form-label">Items</label>
+                                        <input type="text"
+                                            class="form-control"
+                                            name="items" required
                                             id="items">
                                     </div>
                                     <div class="mb-3">
-                                        <label for="quantity" class="form-label">Quantity</label>
+                                        <label for="quantity"
+                                            class="form-label">Quantity</label>
                                         <input type="number"
-                                            class="form-control" id="quantity" name="quantity" required
+                                            class="form-control"
+                                            id="quantity"
+                                            name="quantity" required
                                             required>
                                         <div class="invalid-feedback">
                                             Please enter the Quantity.
@@ -270,31 +349,38 @@
             </div>
 
             <!-- Search modal -->
-            <div class="modal fade" id="searchModal" tabindex="-1"
+            <div class="modal fade" id="searchPO" tabindex="-1"
                 role="dialog"
-                aria-labelledby="searchModalLabel" aria-hidden="true">
+                aria-labelledby="searchPOLabel" aria-hidden="true">
                 <!-- ... (Search modal content) -->
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <!-- Your details modal content -->
                         <div class="modal-header">
-                            <h4 class="modal-title" id="detailsModalLabel">
-                                Search Vendor</h4>
+                            <h4 class="modal-title"
+                                id="poDetailsLabel">
+                                Search Order</h4>
                             <button type="button" class="btn-close"
-                                data-bs-dismiss="modal" aria-label="Close"></button>
+                                data-bs-dismiss="modal"
+                                aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <!-- Details content -->
-                            <div class="container mt-5">
+                            <div class="container" id="parent1">
 
-                                <div class="mb-3">
-                                    <label for="orderIdInput"
-                                        class="form-label">Search Order ID:</label>
-                                    <input type="text" class="form-control"
-                                        id="orderIdInput"
+                                <div class="mb-3" id="myDiv1">
+                                    <label for="orderIdInput1"
+                                        class="form-label">Search Order
+                                        ID:</label>
+                                    <input type="text"
+                                        class="form-control"
+                                        id="orderIdInput1"
                                         placeholder="Enter Order ID">
                                     <button class="btn btn-primary mt-3"
                                         onclick="searchOrder()">Search</button>
+                                </div>
+                                <div id="table">
+
                                 </div>
 
                             </div>
@@ -316,13 +402,16 @@
                         Your
                         Website 2023</div>
                     <div class="col-lg-4 my-3 my-lg-0">
-                        <a class="btn btn-dark btn-social mx-2" href="#!"
+                        <a class="btn btn-dark btn-social mx-2"
+                            href="#!"
                             aria-label="Twitter"><i
                                 class="fab fa-twitter"></i></a>
-                        <a class="btn btn-dark btn-social mx-2" href="#!"
+                        <a class="btn btn-dark btn-social mx-2"
+                            href="#!"
                             aria-label="Facebook"><i
                                 class="fab fa-facebook-f"></i></a>
-                        <a class="btn btn-dark btn-social mx-2" href="#!"
+                        <a class="btn btn-dark btn-social mx-2"
+                            href="#!"
                             aria-label="LinkedIn"><i
                                 class="fab fa-linkedin-in"></i></a>
                     </div>
@@ -330,7 +419,8 @@
                         <a class="link-dark text-decoration-none me-3"
                             href="#!">Privacy
                             Policy</a>
-                        <a class="link-dark text-decoration-none" href="#!">Terms
+                        <a class="link-dark text-decoration-none"
+                            href="#!">Terms
                             of Use</a>
                     </div>
                 </div>
@@ -345,105 +435,7 @@
         <script
             src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <!-- Core theme JS-->
-        <script>
 
-            function getOptionTag() {
-                var select = document.getElementById("options");
-                var xhttp = new XMLHttpRequest();
-                xhttp.onreadystatechange = function() {
-                    if (this.readyState == 4 && this.status == 200) {
-                        var allVendor = JSON.parse(this.responseText); // Parse the response as JSON
-                        var option = ""; // Initialize option as an empty string
-            
-                        for (let i = 0; i < allVendor.length; i++) {
-                            option += `<option value="${allVendor[i].vendor_code}">${allVendor[i].vendor_code}</option> <br>`;
-                        }
-                        console.log(option)
-                        // Insert the options into the select element
-                        select.insertAdjacentHTML("afterend", option);
-                    }
-                };
-            
-                xhttp.open("GET", "http://127.0.0.1:8000/api/vendors/", true);
-                xhttp.send();
-            }
-            
-
-function searchOrder() {
-    // Perform API call to fetch order details based on the entered Order ID
-    // Fill the table body with the fetched data
-    document.getElementById('orderDetailsTable').classList.remove('hide');
-    document.getElementById('orderDetailsTable').classList.add('fadeIn');
-}
-
-function showUpdateForm() {
-    // Autofill form fields with the selected order details from the table
-    document.getElementById('updateForm').classList.remove('hide');
-    document.getElementById('updateForm').classList.add('fadeIn');
-}
-
-function deleteOrder() {
-    // Perform deletion of the selected order
-    // Handle confirmation/alert before deletion
-}
-
-function updateOrder() {
-    // Perform update operation with the modified data from the form
-    // Show success message or handle errors
-}
-function openAddPO() {
-$('#addPo').modal('show');
-getOptionTag();
-}
-
-const addPo = new bootstrap.Modal(document.getElementById('addPo'), {
-backdrop: 'static',
-keyboard: false
-});
-
-function closeModal() {
-// Close modal
-this.hide();
-}
-
-function openSearchDialog() {
-$('#searchModal').modal('show');
-}
-
-const searchModal = new bootstrap.Modal(document.getElementById('searchModal'), {
-backdrop: 'static',
-keyboard: false
-});
-// Open details modal on Details button click
-$('.editBtn').click(function() {
-$('#editModal').modal('show');
-});
-
-
-const editModal = new bootstrap.Modal(document.getElementById('editModal'), {
-backdrop: 'static',
-keyboard: false
-});
-
-// Open details modal on Details button click
-$('.detailsBtn').click(function() {
-$('#detailsModal').modal('show');
-});
-
-const details = new bootstrap.Modal(document.getElementById('detailsModal'), {
-backdrop: 'static',
-keyboard: false
-});
-
-    </script>
-        <script>
-        $(document).ready(function() {
-            $('#myDataTable').DataTable();
-        });
-    </script>
-        <!-- CSS -->
-
-        <!-- jQuery -->
         <script
             src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 

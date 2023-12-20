@@ -66,8 +66,7 @@ def profile(request):
                     return Response({'message': 'Vendor updated successfully'})
             except requests.RequestException as e:
                 return Response({'error': f'Request Exception: {str(e)}'}, status=500)
-        elif req == "delete":
-            pass
+     
         
     try:
         

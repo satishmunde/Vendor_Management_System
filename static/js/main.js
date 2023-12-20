@@ -1,17 +1,98 @@
-function searchOrder() {
-    // Perform API call to fetch order details based on the entered Order ID
-    // Fill the table body with the fetched data
-    document.getElementById('orderDetailsTable').classList.remove('hide');
-    document.getElementById('orderDetailsTable').classList.add('fadeIn');
+// function searchOrder() {
+//     // Perform API call to fetch order details based on the entered Order ID
+//     // Fill the table body with the fetched data
+//     document.getElementById('orderDetailsTable').classList.remove('hide');
+//     document.getElementById('orderDetailsTable').classList.add('fadeIn');
+// }
+
+
+function showUpdateForm() {
+    // Autofill form fields with the selected order details from the table
+    document.getElementById('updateForm').classList.remove('hide');
+    document.getElementById('updateForm').classList.add('fadeIn');
 }
 
-function deleteOrder() {
+function openAddPO() {
+$('#addPo').modal('show');
+
+
+    
+}
+const addPo = new bootstrap.Modal(document.getElementById('addPo'), {
+    backdrop: 'static',
+    keyboard: false
+    });
+function openDtlPO(po_code) {
+    $('#searchPO').modal('hide');
+    $('#poDetails').modal('show');
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', `http://127.0.0.1:8000/api/po/${po_code}/`, true);
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+
+            if (xhr.status === 200) {
+                var data = JSON.parse(xhr.responseText);
+                console.log(data);
+
+                var dtl = `
+    <p><strong>PO Number:</strong> ${data && data.po_number ? data.po_number : 'N/A'}</p>
+    <p><strong>Vendor:</strong> ${data && data.vendor ? data.vendor : 'N/A'}</p>
+    <p><strong>Order Date:</strong> ${data && data.order_date ? new Date(data.order_date).toLocaleString() : 'N/A'}</p>
+    <p><strong>Delivery Date:</strong> ${data && data.delivery_date ? new Date(data.delivery_date).toLocaleString() : 'N/A'}</p>
+    <p><strong>Items:</strong> ${data && data.items && data.items.length > 0 ? data.items[0].item_name : 'N/A'}</p>
+    <p><strong>Quantity:</strong> ${data && data.quantity ? data.quantity : 'N/A'}</p>
+    <p><strong>Status:</strong> ${data && data.status ? data.status : 'N/A'}</p>
+    <p><strong>Quality Rating:</strong> ${data && data.quality_rating ? data.quality_rating : 'N/A'}</p>
+    <p><strong>Issue Date:</strong> ${data && data.issue_date ? new Date(data.issue_date).toLocaleString() : 'N/A'}</p>
+    <p><strong>Acknowledgment Date:</strong>${data && data.acknowledgment_date ? data.acknowledgment_date.toLocaleString() : 'N/A'}</p>
+`;
+
+
+                    var myDiv = document.getElementById('dtl');
+                    myDiv.innerHTML=dtl            }
+        }
+    };
+    xhr.onerror = function () {
+        alert("Request failed"); // Handle network errors
+    };
+    xhr.send();
+
+    }
+function closeModal() {
+// Close modal
+this.hide();
+}
+
+function openSearch() {
+$('#searchPO').modal('show');
+
 
 }
 
-function updateOrder() {
+const searchPO = new bootstrap.Modal(document.getElementById('searchPO'), {
+    backdrop: 'static',
+    keyboard: false
+    });
+// Open details modal on Details button click
 
-}
+
+const editPO = new bootstrap.Modal(document.getElementById('editPO'), {
+backdrop: 'static',
+keyboard: false
+});
+
+// Open details modal on Details button click
+$('.detailsBtn').click(function() {
+$('#detailsModal').modal('show');
+});
+
+
+
+        $(document).ready(function() {
+            $('#myDataTable').DataTable();
+        });
+
 function openAddVendorDialog() {
 
     $('#addVendorModal').modal('show');
@@ -21,19 +102,57 @@ const addVendorModal = new bootstrap.Modal(document.getElementById('addVendorMod
     keyboard: false
 });
 
-function closeModal() {
-    // Close modal
-    // $('#searchModal').hide(2000)
-    this.hide
-}
-
 function openSearchDialog() {
     $('#searchModal').modal('show');
 }
 
 
 
+function editPODialog(po_code) {
+    $('#searchPO').modal('hide');
+
+    document.getElementById('editPOLabel').innerHTML = po_code;
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', `http://127.0.0.1:8000/api/po/${po_code}/`, true);
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+
+            if (xhr.status === 200) {
+                var data = JSON.parse(xhr.responseText);
+                console.log(data);
+                var selectElement = document.getElementById("editvendor");
+
+                for (var i = 0; i < selectElement.options.length; i++) {
+                    console.log(selectElement.options[i].value );
+                    console.log(data.vendor);
+                    if (selectElement.options[i].value == data.vendor) {
+                      selectElement.options[i].selected = true;
+                      break; // Stop looping once the option is selected
+                    }
+                  }
+                
+                  document.getElementById('editpoid').value=po_code;
+           
+                document.getElementById('edititems').value = data.items[0].item_name
+                document.getElementById("editqty").value = data.quantity
+
+                $('#editPO').modal('show');
+            } else {
+                alert(`Error ${xhr.status}: ${xhr.statusText}`); // An error occurred!
+            }
+        }
+    };
+    xhr.onerror = function () {
+        alert("Request failed"); // Handle network errors
+    };
+    xhr.send();
+}
+
+
 function openEditVendor(vendorid) {
+    // $('#searchModal').modal('hide');
     $('#searchModal').modal('hide');
     console.log("-----------------------------called");
 
@@ -63,22 +182,19 @@ function openEditVendor(vendorid) {
     };
     xhr.send();
 }
-
-
-const searchModal = new bootstrap.Modal(document.getElementById('searchModal'), {
-    backdrop: 'static',
-    keyboard: false
-});
-// Open details modal on Details button click
-// $('.editBtn').click(function () {
-//     $('#editModal').modal('show');
-// });
-
-
 const editModal = new bootstrap.Modal(document.getElementById('editModal'), {
     backdrop: 'static',
     keyboard: false
 });
+
+
+
+const searchModal = new bootstrap.Modal(document.getElementByClas('searchModal'), {
+    backdrop: 'static',
+    keyboard: false
+});
+
+
 
 
 const details = new bootstrap.Modal(document.getElementById('detailsModal'), {
@@ -86,7 +202,73 @@ const details = new bootstrap.Modal(document.getElementById('detailsModal'), {
     keyboard: false
 });
 
+function searchOrder() {
 
+
+    var pocode = document.getElementById("orderIdInput1").value
+
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', `http://127.0.0.1:8000/api/po/${pocode}/`, true);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                var data = JSON.parse(xhr.responseText);
+
+                console.log(data);
+                let table = ""
+                var myDiv = document.getElementById('parent1');
+                myDiv.removeChild(myDiv.children[1])
+
+
+
+                table = ` <table class="table table-hover">
+        <thead>
+            <tr>
+            <th scope="col">PO Number</th>
+            <th scope="col">Vendor Name</th>
+           
+            <th scope="col">Edit List </th>
+            <th scope="col">List Info</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <tr>
+                <th scope="row">${data.po_number}</th>
+                <td>${data.vendor}</td>
+
+                <td>
+                                        <button
+                                            onclick="editPODialog('${data.po_number}');"
+                                            class="btn btn-sm btn-primary editBtn"><i
+                                                class="far fa-edit"></i>
+                                            edit</button>
+                                        <button
+                                            onclick="deletePO('${data.po_number}');"
+                                            class="btn btn-sm btn-danger deleteBtn"><i
+                                                class="fas fa-trash-alt"></i>
+                                            delete</button>
+                                    </td>
+                                    <td><button onclick="openDtlPO('${data.po_number}');"
+                                            class="btn btn-sm btn-info detailsBtn"><i
+                                                class="fas fa-info-circle"></i>
+                                            Details</button></td>
+            </tr>
+
+        
+        </tbody>
+    </table>`
+                var myDiv = document.getElementById('myDiv1');
+                myDiv.insertAdjacentHTML('afterend', table);
+
+            } else {
+                console.error('There was a problem with the request.');
+            }
+        }
+    };
+    xhr.send();
+}
 
 function searchUser() {
 
@@ -139,11 +321,11 @@ function searchUser() {
                 </td>
                 <td>
                 
-                        <button  value="${data.vendor_code}" id ="detailsbtn"
-                            class="btn btn-sm btn-info detailsBtn"><i
-                                class="fas fa-info-circle"></i>
-                            Details</button>
-                
+                <a href="/performance-evaluation/${data.vendor_code}/">
+                <button onclick="closeModal();" class="btn btn-sm btn-info detailsBtn">
+                    <i class="fas fa-info-circle"></i> Details
+                </button>
+            </a>
                 </td>
             </tr>
 
@@ -176,3 +358,20 @@ function deleteVendor(vendor_code) {
     }
     xhr.send();
 }
+function deletePO(po_code) {
+    // $('#searchModal').modal('hide');
+    // console.log("-----------------------------called");
+    var xhr = new XMLHttpRequest();
+    console.log(po_code);
+    xhr.open('DELETE', `http://127.0.0.1:8000/api/po/${po_code}/`, true);
+    xhr.onreadystatechange = function () {
+        
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            alert(`${po_code} is Deleted`)
+            location.href = "http://127.0.0.1:8000/purchase-order/"
+        }
+    }
+    xhr.send();
+}
+
+

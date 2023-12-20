@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "Historical_Model",
     'rest_framework',
     'api',
+    # 'rest_framework.authtoken',
 ]
 
 # Other DRF configurations
@@ -50,6 +51,10 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.JSONParser',
         'rest_framework.parsers.FormParser',
         'rest_framework.parsers.MultiPartParser',
+    # ],
+    #  'DEFAULT_AUTHENTICATION_CLASSES': [
+    #     'rest_framework.authentication.TokenAuthentication',
+      
     ],}
 
 MIDDLEWARE = [

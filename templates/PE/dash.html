@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Historical Metrics Dashboard</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6">
+            <canvas id="deliveryRateChart"></canvas>
+        </div>
+        <div class="col-md-6">
+            <canvas id="qualityRatingChart"></canvas>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <canvas id="responseTimeChart"></canvas>
+        </div>
+        <div class="col-md-6">
+            <canvas id="fulfillmentRateChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Sample data (replace with your historical records)
+    var dates = ['Jan', 'Feb', 'Mar', 'Apr'];
+    var deliveryRateData = [0.8, 0.7, 0.85, 0.75];
+    var qualityRatingData = [4.2, 4.5, 4.6, 4.4];
+    var responseTimeData = [12, 10, 14, 11];
+    var fulfillmentRateData = [0.9, 0.85, 0.88, 0.92];
+
+    // Create Chart.js instances for each metric
+    var deliveryRateChart = new Chart(document.getElementById('deliveryRateChart').getContext('2d'), {
+        type: 'line',
+        data: {
+            labels: dates,
+            datasets: [{
+                label: 'On-Time Delivery Rate',
+                data: deliveryRateData,
+                borderColor: 'blue',
+                borderWidth: 1,
+                fill: false
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+
+    var qualityRatingChart = new Chart(document.getElementById('qualityRatingChart').getContext('2d'), {
+        type: 'line',
+        data: {
+            labels: dates,
+            datasets: [{
+                label: 'Quality Rating Avg',
+                data: qualityRatingData,
+                borderColor: 'green',
+                borderWidth: 1,
+                fill: false
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+
+    var responseTimeChart = new Chart(document.getElementById('responseTimeChart').getContext('2d'), {
+        type: 'line',
+        data: {
+            labels: dates,
+            datasets: [{
+                label: 'Average Response Time',
+                data: responseTimeData,
+                borderColor: 'orange',
+                borderWidth: 1,
+                fill: false
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+
+    var fulfillmentRateChart = new Chart(document.getElementById('fulfillmentRateChart').getContext('2d'), {
+        type: 'line',
+        data: {
+            labels: dates,
+            datasets: [{
+                label: 'Fulfillment Rate',
+                data: fulfillmentRateData,
+                borderColor: 'red',
+                borderWidth: 1,
+                fill: false
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+</script>
+
+</body>
+</html>
